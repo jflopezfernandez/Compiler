@@ -9,7 +9,7 @@
 
 CC := gcc
 
-CFLAGS := -std=c11 -Wall -Wextra -Wpedantic -Werror
+CFLAGS := -std=c11 -Wall -Wextra -Wpedantic
 CPPFLAGS := -I include
 LFLAGS := 
 
