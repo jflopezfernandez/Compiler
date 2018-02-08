@@ -87,73 +87,6 @@ void advance() {
 	lookahead = lex();
 }
 
-void statements() {
-	while (!match(EOI)) {
-		expression();
-		
-		if (match(SEMI)) {
-			advance();
-		} else {
-			fprintf(stderr, "%d: Inserting missing semicolon\n", yylineno);
-		}
-	}
-}
-
-void expression() {
-	/** expression  -> term expression'
-	 *  expression' -> PLUS term expression' | EPSILON
-	 */
-	
-	if (!legal_lookahead(NUM_OR_ID, LP, 0)) {
-		return;
-	}
-	
-	term();
-	
-	while (match(PLUS)) {
-		advance();
-		term();
-	}
-}
-
-void term() {
-	if (!legal_lookahead(NUM_OR_ID, LP, 0)) {
-		return;
-	}
-	
-	factor();
-	
-	while (match(TIMES)) {
-		advance();
-		factor();
-	}
-}
-
-/** @fn void factor()
- *
- */
-
-void factor() {
-	if (!legal_lookahead(NUM_OR_ID, LP, 0)) {
-		return;
-	}
-	
-	if (match(NUM_OR_ID)) {
-		advance();
-	} else if (match(LP)) {
-		advance();
-		expression();
-		
-		if (match(RP)) {
-			advance();
-		} else {
-			fprintf(stderr, "%d: Mismatched parenthesis\n", yylineno);
-		}
-	} else {
-		fprintf(stderr, "%d: Number or identifier expected\n");
-	}
-}
-
 /** @fn int legal_lookahead(int firstArg)
  *
  *  @param firstArg Zero-terminated variable list of int-macro tokens that are
@@ -188,7 +121,33 @@ int legal_lookahead(int first_arg) {
 		}
 	} else {
 		*p++ = first_arg;
+		
+		while ((tok = va_arg(args, int)) && (p < &lookaheads[MAXFIRST])) {
+			*++p = tok;
+		}
+		
+		while (!match(SYNCH)) {
+			for (current = lookaheads; current < p; ++current) {
+				if (match(*current)) {
+					rval = TRUE;
+					
+					goto EXIT_FUNCTION;
+				}
+			}
+			
+			if (!error_printed) {
+				fprintf(stderr, "Line %d: Syntax error\n", yylineno);
+				
+				error_printed = TRUE;
+			}
+			
+			advance();
+		}
 	}
+	
+	EXIT_FUNCTION:
+		va_end(args);
+		return rval;
 }
 
 

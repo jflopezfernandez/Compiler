@@ -25,14 +25,6 @@ int match(int token);
 
 void advance();
 
-void statements();
-
-void expression();
-
-void term();
-
-void factor();
-
 int legal_lookahead(int first_arg);
 
 

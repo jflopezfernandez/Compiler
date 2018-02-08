@@ -1,0 +1,4 @@
+int x;
+unsigned short x;
+signed long x;
+const volatile short int x;
