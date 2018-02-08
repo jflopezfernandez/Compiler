@@ -1,3 +1,8 @@
+/** @file lex.c
+ *  
+ *  @brief Main lexer and parser implementation code
+ *
+ */
 
 #include "lex.h"
 
@@ -124,6 +129,10 @@ void term() {
 	}
 }
 
+/** @fn void factor()
+ *
+ */
+
 void factor() {
 	if (!legal_lookahead(NUM_OR_ID, LP, 0)) {
 		return;
@@ -179,3 +188,5 @@ int legal_lookahead(int first_arg) {
 		}
 	}
 }
+
+

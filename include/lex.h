@@ -36,5 +36,4 @@ void factor();
 int legal_lookahead(int first_arg);
 
 
-
 #endif /** SRC_INCLUDES_LEX_H_ */
