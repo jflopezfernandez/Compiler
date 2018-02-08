@@ -186,6 +186,8 @@ int legal_lookahead(int first_arg) {
 		} else {
 			// TODO: Add something for an else case??
 		}
+	} else {
+		*p++ = first_arg;
 	}
 }
 
