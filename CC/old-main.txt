@@ -1,0 +1,218 @@
+/*if (argc == 1)
+    {
+        std::cerr << "<Need file>" << NL;
+
+        return EXIT_FAILURE;
+    }
+
+    std::map<std::string, char> asciimap;
+    asciimap["00"] = '\x0';
+    asciimap["01"] = '\x1';
+    asciimap["02"] = '\x2';
+    asciimap["03"] = '\x3';
+    asciimap["04"] = '\x4';
+    asciimap["05"] = '\x5';
+    asciimap["06"] = '\x6';
+    asciimap["07"] = '\x7';
+    asciimap["08"] = '\x8';
+    asciimap["09"] = '\x9';
+    asciimap["0A"] = '\xA';
+    asciimap["0B"] = '\xB';
+    asciimap["0C"] = '\xC';
+    asciimap["0D"] = '\xD';
+    asciimap["0E"] = '\xE';
+    asciimap["0F"] = '\xF';
+    asciimap["10"] = '\x10';
+    asciimap["11"] = '\x11';
+    asciimap["12"] = '\x12';
+    asciimap["13"] = '\x13';
+    asciimap["14"] = '\x14';
+    asciimap["15"] = '\x15';
+    asciimap["16"] = '\x16';
+    asciimap["17"] = '\x17';
+    asciimap["18"] = '\x18';
+    asciimap["19"] = '\x19';
+    asciimap["1A"] = '\x1A';
+    asciimap["1B"] = '\x1B';
+    asciimap["1C"] = '\x1C';
+    asciimap["1D"] = '\x1D';
+    asciimap["1E"] = '\x1E';
+    asciimap["1F"] = '\x1F';
+    asciimap["20"] = ' ';
+    asciimap["21"] = '!';
+    asciimap["22"] = '"';
+    asciimap["23"] = '#';
+    asciimap["24"] = '$';
+    asciimap["25"] = '%';
+    asciimap["26"] = '&';
+    asciimap["27"] = '\'';
+    asciimap["28"] = '(';
+    asciimap["29"] = ')';
+    asciimap["2A"] = '*';
+    asciimap["2B"] = '+';
+    asciimap["2C"] = ',';
+    asciimap["2D"] = '-';
+    asciimap["2E"] = '.';
+    asciimap["2F"] = '/';
+    asciimap["30"] = '0';
+    asciimap["31"] = '1';
+    asciimap["32"] = '2';
+    asciimap["33"] = '3';
+    asciimap["34"] = '4';
+    asciimap["35"] = '5';
+    asciimap["36"] = '6';
+    asciimap["37"] = '7';
+    asciimap["38"] = '8';
+    asciimap["39"] = '9';
+    asciimap["3A"] = ':';
+    asciimap["3B"] = ';';
+    asciimap["3C"] = '<';
+    asciimap["3D"] = '=';
+    asciimap["3E"] = '>';
+    asciimap["3F"] = '?';
+    asciimap["40"] = '@';
+    asciimap["41"] = 'A';
+    asciimap["42"] = 'B';
+    asciimap["43"] = 'C';
+    asciimap["44"] = 'D';
+    asciimap["45"] = 'E';
+    asciimap["46"] = 'F';
+    asciimap["47"] = 'G';
+    asciimap["48"] = 'H';
+    asciimap["49"] = 'I';
+    asciimap["4A"] = 'J';
+    asciimap["4B"] = 'K';
+    asciimap["4C"] = 'L';
+    asciimap["4D"] = 'M';
+    asciimap["4E"] = 'N';
+    asciimap["4F"] = 'O';
+    asciimap["50"] = 'P';
+    asciimap["51"] = 'Q';
+    asciimap["52"] = 'R';
+    asciimap["53"] = 'S';
+    asciimap["54"] = 'T';
+    asciimap["55"] = 'U';
+    asciimap["56"] = 'V';
+    asciimap["57"] = 'W';
+    asciimap["58"] = 'X';
+    asciimap["59"] = 'Y';
+    asciimap["5A"] = 'Z';
+    asciimap["5B"] = '[';
+    asciimap["5C"] = '\\';
+    asciimap["5D"] = ']';
+    asciimap["5E"] = '^';
+    asciimap["5F"] = '_';
+    asciimap["60"] = '`';
+    asciimap["61"] = 'a';
+    asciimap["62"] = 'b';
+    asciimap["63"] = 'c';
+    asciimap["64"] = 'd';
+    asciimap["65"] = 'e';
+    asciimap["66"] = 'f';
+    asciimap["67"] = 'g';
+    asciimap["68"] = 'h';
+    asciimap["69"] = 'i';
+    asciimap["6A"] = 'j';
+    asciimap["6B"] = 'k';
+    asciimap["6C"] = 'l';
+    asciimap["6D"] = 'm';
+    asciimap["6E"] = 'n';
+    asciimap["6F"] = 'o';
+    asciimap["70"] = 'p';
+    asciimap["71"] = 'q';
+    asciimap["72"] = 'r';
+    asciimap["73"] = 's';
+    asciimap["74"] = 't';
+    asciimap["75"] = 'u';
+    asciimap["76"] = 'v';
+    asciimap["77"] = 'w';
+    asciimap["78"] = 'x';
+    asciimap["79"] = 'y';
+    asciimap["7A"] = 'z';
+    asciimap["7B"] = '{';
+    asciimap["7C"] = '|';
+    asciimap["7D"] = '}';
+    asciimap["7E"] = '~';
+    asciimap["7F"] = '\x7F';
+
+    std::ofstream outputFile { argv[1], std::ios::out };*/
+
+    const std::vector<std::vector<std::string>> ProgramSections = {
+        sectionPEHeader,
+        sectionText,
+        sectionRData,
+        sectionN1
+    };
+
+    unsigned long long location = 0;
+
+    for (auto& section : ProgramSections)
+    {
+        location += section.size();
+    }
+
+    std::cout << "Location: " << location << "\n\n";
+
+    /*
+    for (auto& section : ProgramSections)
+    {
+        AddSection(outputFile, section, asciimap);
+    }
+
+    outputFile.close();*/
+
+    // Read in the value of the current ops element
+    // Find it in the ascii table
+    // Print that value
+
+    // Output code:
+    #ifdef GENERATE_ASSEMBLY
+    std::ofstream assemblyFile { "a.asm", std::ios::out };
+
+    if (!assemblyFile.is_open())
+    {
+        std::cerr << "[Error]: Could not create output file." << NL;
+
+        return EXIT_FAILURE;
+    }
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << "; file a.asm" << NL;
+    assemblyFile << "; For x86 (32-bit), assemble with debug information:" << NL;
+    assemblyFile << ";   ml -c -Zi a.asm" << NL;
+    assemblyFile << "; For x64 (64-bit), assemble with debug information:" << NL;
+    assemblyFile << ";   ml64 -c -DX64 -Zi a.asm" << NL;
+    assemblyFile << "; Then, link with:" << NL;
+    assemblyFile << ";   ld a.obj" << NL;
+    assemblyFile << ";" << NL;
+    assemblyFile << "; In this sample, the 'x64' define excludes source not used" << NL;
+    assemblyFile << "; when targeting the x64 architecture." << NL;
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << "ifndef x64" << NL;
+    assemblyFile << ".686p" << NL;
+    assemblyFile << ".XMM" << NL;
+    assemblyFile << ".model flat, C" << NL;
+    assemblyFile << "endif" << NL;
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << ".data" << NL;
+    assemblyFile << "; user data" << NL;
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << ".code" << NL;
+    assemblyFile << "; user code" << NL;
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << "fxn PROC public" << NL;
+    assemblyFile << "\txor eax, eax ; zero function return value" << NL;
+    assemblyFile << "\tret" << NL;
+    assemblyFile << "fxn ENDP" << NL;
+
+    assemblyFile << "\n" << NL;
+    assemblyFile << "end" << NL;
+
+    assemblyFile.close();
+    #endif
+
+    
