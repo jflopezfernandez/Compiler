@@ -27,6 +27,8 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
+#include "configuration.h"
+
 /** @namespace Options
  *
  *  @brief Alias for boost::program_options

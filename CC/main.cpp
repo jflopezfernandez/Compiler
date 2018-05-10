@@ -21,23 +21,15 @@
  *
  */
 
-/** @todo Include C standard library */
-
-#include <cstdio>
-#include <cstdlib>
 
 #include <algorithm>
 #include <filesystem>
-#include <fstream>
 #include <iomanip>
 #include <iostream>
 #include <iterator>
 #include <map>
 #include <numeric>
-#include <sstream>
-#include <string>
 #include <utility>
-#include <vector>
 
 #include <boost/convert.hpp>
 #include <boost/convert/base.hpp>
@@ -45,7 +37,6 @@
 
 #include <gsl/gsl>
 
-#include "version.h"
 #include "options.h"
 #include "IO.h"
 #include "test-configuration.h"
@@ -65,10 +56,12 @@
 
 int main(int argc, char *argv[])
 {
-    int optVerbosity = 0;
-    int optOptimizationLevel = 0;
+    Configuration config;
 
     /** @todo Add specific warning flags */
+
+    int optVerbosity = 0;
+    int optOptimizationLevel = 0;
 
     std::string optLanguage = "C";
     std::string optLanguageStandard = "C11";

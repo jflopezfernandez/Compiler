@@ -19,11 +19,16 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="configuration.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="configuration.h" />
     <ClInclude Include="IO.h" />
+    <ClInclude Include="options.h" />
     <ClInclude Include="sections.h" />
+    <ClInclude Include="test-configuration.h" />
+    <ClInclude Include="version.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
