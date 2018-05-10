@@ -21,6 +21,8 @@
  *
  */
 
+/** @todo Include C standard library */
+
 #include <cstdio>
 #include <cstdlib>
 
@@ -43,6 +45,10 @@
 #include <boost/optional.hpp>
 #include <boost/program_options.hpp>
 
+/** @todo Implement Catch testing once compiler is generating code.
+ *
+ */
+
 #ifdef CATCH_TEST_ENABLED
 #define CATCH_CONFIG_RUNNER
 #include <Catch/catch.hpp>
@@ -63,17 +69,72 @@ namespace Options = boost::program_options;
 using OptsDescription           = Options::options_description;
 using PositionalOptsDescription = Options::positional_options_description;
 
-/** @fn void PrintHelp() noexcept
+/** @fn inline void PrintHelp() noexcept
  *
  *  @details This function simply prints the compiler help dialog.
  *
  */
 
-void PrintHelp(OptsDescription& options) noexcept
+inline void PrintHelp(const OptsDescription& options) noexcept
 {
-    /** @todo Implement PrintHelp() function */
-    std::cout << "<Print Help>\n";
     std::cout << options << "\n";
+
+    /** @todo Maybe create a list of arguments that trigger an exit call and handle all in a more modular fashion */
+    std::exit(EXIT_SUCCESS);
+}
+
+inline void PrintVersion() noexcept
+{
+    std::cout << "Version: " << "0.0.1" << "\n";
+
+    std::exit(EXIT_SUCCESS);
+}
+
+/** @fn void HandleArgument(const OptsDescription& options, const Options::variables_map& map, const std::string& arg)
+ *
+ *  @details I'm looking for a better way to handle all the argument parsing
+ *  and processing, rather than throwing it all in main the way it's shown in 
+ *  the example code. I'm trying to come up with a way of creating a generic
+ *  handler function that determines the action to take based on the actual
+ *  argument passed. This might end up being a map in a map, though, I need
+ *  to plan it out.
+ *
+ *  @returns <b>void</b>
+ *
+ */
+
+inline void HandleArgument(const OptsDescription& options, const Options::variables_map& map, const std::string& arg)
+{
+    if (map.count(arg))
+    {
+        if (arg == "help")
+        {
+            PrintHelp(options);
+        } else if (arg == "version") {
+            PrintVersion();
+        }
+    }
+
+    /** @todo Finish implementing this function with al the arguments */
+}
+
+/** @fn inline void HandleArguments(const std::vector<std::string>& args, const OptsDescription& options, const Options::variables_map& map)
+ *
+ *  @details This function is essentially just a wrapper for this range-based
+ *  for loop. All it does differently is it takes a std::vector of std::strings,
+ *  rather than just a single string, and it calls the HandleArgument() function
+ *  individually for every element in the arguments vector.
+ *
+ *  @returns <b>void</b>
+ *
+ */
+
+inline void HandleArguments(const std::vector<std::string>& args, const OptsDescription& options, const Options::variables_map& map)
+{
+    for (auto& arg : args)
+    {
+        HandleArgument(options, map, arg);
+    }
 }
 
 /** @fn int main(int argc, char *argv[])
@@ -91,6 +152,7 @@ void PrintHelp(OptsDescription& options) noexcept
 
 int main(int argc, char *argv[])
 {
+    int optVerbosity = 0;
     int optOptimizationLevel = 0;
 
     /** @todo Add specific warning flags */
@@ -101,15 +163,16 @@ int main(int argc, char *argv[])
 
     bool optPrintASTs = false;
 
-    OptsDescription genericOptions("generic");
+    OptsDescription genericOptions("Generic Options");
     genericOptions.add_options()
         ("help,h", "Display help dialog")
-        ("version,v", "Display compiler version")
+        ("version", "Display compiler version")
         ("config-file,c", Options::value<std::string>(&optConfigurationFileName)->default_value("<None-Set>"), "Configuration file name")
     ;
 
-    OptsDescription configurationOptions("configuration");
+    OptsDescription configurationOptions("Configuration Settings");
     configurationOptions.add_options()
+        ("verbosity,v", Options::value<int>(&optVerbosity)->default_value(0), "Verbosity of output [1-5]")
         ("language,l", Options::value<std::string>(&optLanguage)->default_value("C"), "Source files language")
         ("std", Options::value<std::string>(&optLanguageStandard)->default_value("C11"), "Language standard")
         ("optimization-level,O", Options::value<int>(&optOptimizationLevel)->default_value(0), "Compiler optimization level [0 - 3]")
@@ -159,17 +222,14 @@ int main(int argc, char *argv[])
                 configurationFileStream.close();
             }
         }
+        
+        const std::vector<std::string> arguments = {
+            "help",
+            "version"
+        };
 
-        //Options::notify(map);
-
-        if (map.count("help"))
-        {
-            PrintHelp(cmdLineOptions);
-
-            std::cout << genericOptions << "\n";
-
-            return EXIT_SUCCESS;
-        }
+        /** @todo I might have to change the argument opts from visible to all of them */
+        HandleArguments(arguments, visibleOptions, map);
 
         /** @todo Create program version structure to handle this information in a modular way
          *  @todo Create a program configuration class to handle program settings
@@ -178,6 +238,8 @@ int main(int argc, char *argv[])
 
         if (map.count("version"))
         {
+            /** @todo Create compiler version struct */
+
             std::cout << "Compiler Version: " << "0.0.1" << "\n";
 
             return EXIT_SUCCESS;
@@ -186,6 +248,7 @@ int main(int argc, char *argv[])
         if (map.count("optimization-level"))
         {
             /** @todo Validate optimization level. It must be no greater than 3 and no less than 0.
+             *  @todo Implement configuration class to handle log verbosity
              *
              */
 
@@ -194,6 +257,8 @@ int main(int argc, char *argv[])
 
         if (map.count("input-file"))
         {
+            /** @todo Implement verbosity setting to prevent outputting to console all the time */
+
             std::cout
                 << "Input files: "
                 << map["input-file"].as<std::vector<std::string>>() << "\n";
@@ -206,6 +271,8 @@ int main(int argc, char *argv[])
         }
 
         if (map.count("include-path")) {
+            /** @todo Implement verbosity setting to prevent these console logs every time */
+
             std::cout 
                 << "Include paths: "
                 << map["include-path"].as<std::vector<std::string>>() << "\n";
@@ -213,6 +280,8 @@ int main(int argc, char *argv[])
     }
     catch (std::exception& e)
     {
+        /** @todo Implement an actual error-handling module, rather than dealing with each error one by one */
+
         std::cerr << "[Error]: " << e.what() << "\n";
     }
 
